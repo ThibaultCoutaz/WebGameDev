@@ -52,7 +52,7 @@ gameState.load.prototype = {
      game.load.image('Platform3C', 'images/Platform3C.png');
      game.load.image('Platform2C', 'images/Platform2C.png');
      game.load.image('Platform4C', 'images/Platform4C.png');
-     game.load.image('Platform1C', 'images/Platform3C.png');
+     game.load.image('Platform1C', 'images/Platform1C.png');
 
         //Import staircase pic
      game.load.image('stair1','images/Staircase1.png');
@@ -62,12 +62,16 @@ gameState.load.prototype = {
      game.load.image('stair3.3','images/Staircase3.3.png');
      game.load.image('stair3.4','images/Staircase3.4.png');
 
-        //Import YellowLock,box,heart,YellowKey,pass
+        //Import YellowLock,box,heart,YellowKey,pass,exit
      game.load.image('yellowlock','images/YellowLock.png');
      game.load.image('yellowkey','images/YellowKey.png');
      game.load.image('box','images/Box.png');
      game.load.image('life','images/life.png');
      game.load.image('pass','images/pass.png');
+     game.load.image('exit','images/Exit.png');
+     game.load.image('end','images/levelcompleted.png');
+     game.load.image('gameover','images/GameOver.png');
+     game.load.image('barrier','images/ladder.png');
 
 
         //Import Script
@@ -131,11 +135,14 @@ gameState.main.prototype = {
         var platform3C = platforms.create(width-129,360, 'Platform3C');
         platform3C.body.immovable = true;
 
-        var platform1C = platforms.create(width-258,100, 'Platform1C');
+       /* var platform1C = platforms.create(width-258,100, 'Platform1C');
+        platform1C.body.immovable = true;*/
+        var wall = platforms.create(180,263,'barrier');
+        wall.body.immovable = true;
+
+        var platform1C = platforms.create(0,480, 'Platform3C');
         platform1C.body.immovable = true;
 
-        var platform1C = platforms.create(0,480, 'Platform1C');
-        platform1C.body.immovable = true;
 
         //the staircase group
             StairCase = game.add.group();
@@ -159,6 +166,10 @@ gameState.main.prototype = {
 
             var Staircase34 = StairCase.create(width-212,100,'stair3.4');
             Staircase34.body.immovable = true;
+
+        //Exit
+            exit=game.add.sprite(width-66,47,'exit');
+            game.physics.arcade.enable(exit);
 
         //Life
             life1= game.add.sprite(0,0,'life');
@@ -280,6 +291,9 @@ gameState.main.prototype = {
         game.physics.arcade.overlap(player, monster2, hit2, null , this);
         game.physics.arcade.overlap(player, monster3, hit3, null , this);
         game.physics.arcade.overlap(player, monster4, hit4, null , this);
+
+        //check if the player finish the level.
+        game.physics.arcade.overlap(player, exit, end, null , this);
 
         //  Reset the players velocity (movement)
         player.body.velocity.x = 0;
@@ -480,6 +494,7 @@ function hit1(){
         life1.kill();
         monster1.kill();
         timer.stop();
+        game.add.sprite(0,0,'gameover');
     }
 }
 
@@ -503,6 +518,7 @@ function hit2(){
         life1.kill();
         monster2.kill();
         timer.stop();
+        game.add.sprite(0,0,'gameover');
     }
 }
 
@@ -526,6 +542,7 @@ function hit3(){
         life1.kill();
         monster3.kill();
         timer.stop();
+        game.add.sprite(0,0,'gameover');
     }
 }
 
@@ -549,6 +566,7 @@ function hit4(){
         life1.kill();
         monster4.kill();
         timer.stop();
+        game.add.sprite(0,0,'gameover');
     }
 }
 
@@ -589,6 +607,11 @@ function stopDrag4(){
     monster4.body.moves=true;
 }
 
+
+//End function.
+function end(){
+    game.add.sprite(150,50,'end');
+}
 
 //we add the two functions to our object
 game.state.add('load', gameState.load);
