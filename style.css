@@ -1,0 +1,7 @@
+body {
+    padding: 0; margin: 0;
+}
+#WebGame {
+    margin: auto;
+    display: table;
+}
